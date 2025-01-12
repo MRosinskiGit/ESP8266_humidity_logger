@@ -8,8 +8,9 @@
 
 extern LoggerClass Logger;
 
+ESP8266WebServer ESPServerClass::_server(80); //Declared private static variable
+
 ESPServerClass::ESPServerClass() {
-  static ESP8266WebServer _server(80);
 }
 
 bool ESPServerClass::connectToWifi(char* ssid, char* password, int maxDelay) {
@@ -17,22 +18,22 @@ bool ESPServerClass::connectToWifi(char* ssid, char* password, int maxDelay) {
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    // Logger.log(".", newLine=false);
+    Logger.log(".", false);
   }
   Logger.log("\nWiFi Connected!");
-  // Logger.log("Adres IP: "+String(WiFi.localIP()));
+  String ip = WiFi.localIP().toString();
+  Logger.log("Adres IP: " + ip);
   return true;
 }
 
 void ESPServerClass::runServer() {
-  // _server.on("/", _printHtmlData);
-  // _server.on("/",     [](){    _server.send(200, "text/plain", "Hello World");  });
+  _server.on("/", _printHtmlData);
   _server.begin();
   Logger.log("Serwer HTTP is running!");
 }
-// void ESPServerClass::_printHtmlData() {
-//   _server.send(200, "text/plain", "Hello World");
-// }
+void ESPServerClass::_printHtmlData() {
+  _server.send(200, "text/plain", "Hello World");
+}
 
 void ESPServerClass::handleRequests() {
   _server.handleClient();

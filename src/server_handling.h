@@ -17,7 +17,7 @@ public:
 
 
 private:
-  // void _printHtmlData();
+  static void _printHtmlData();
   bool _isWifiConnected = false;
   static ESP8266WebServer _server;
 };
